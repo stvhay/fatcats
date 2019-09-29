@@ -24,8 +24,8 @@ class Configuration(object):
         """Converts an address dictionary to an email address."""
         try:
             return email.headerregistry.Address(*(addr[k] for k in ('name', 'user', 'domain')))
-        except Exception:
-            raise ConfigurationError("Error during address conversion.")
+        except Exception as e:
+            raise ConfigurationError("Error during address conversion.") from e
 
     def load(self, config_file):
         """Load a config file."""
@@ -38,8 +38,8 @@ class Configuration(object):
                 self._from_address = data['from']
                 self._to_addresses = data['to']
                 return self
-        except Exception:
-            raise ConfigurationError("Error during load.")
+        except Exception as e:
+            raise ConfigurationError("Error during load.") from e
 
     def save(self, config_file):
         """Save a config file."""
@@ -55,8 +55,8 @@ class Configuration(object):
                     },
                     f,
                     default_flow_style=False)
-        except Exception:
-            raise ConfigurationError("Error during save.")
+        except Exception as e:
+            raise ConfigurationError("Error during save.") from e
 
     def from_address(self):
         """Convert from address to Address."""

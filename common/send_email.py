@@ -18,5 +18,5 @@ def send_email(conf, url):
             msg['Subject'] = conf.subject
             msg.set_content('{}\n\nLast reminder sent {}.'.format(conf.message, conf.last_fed))
             s.send_message(msg)
-    except Exception:
-        raise EmailError("Error sending email.")
+    except Exception as e:
+        raise EmailError("Error sending email.") from e
