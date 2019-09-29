@@ -10,7 +10,7 @@ send a reminder email. Written for feline weight management.
 ### Command Line
 
 ```console
-Usage: meow.py [OPTIONS]
+Usage: fatcats.py [OPTIONS]
 
   Sends an email if a reminder is needed.
 
