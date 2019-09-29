@@ -4,8 +4,8 @@ import datetime
 import logging
 import click
 
-from common.configuration import Configuration, ConfigurationError
-from common.send_email import send_email, EmailError
+from fatcats.common.configuration import Configuration, ConfigurationError
+from fatcats.common.send_email import send_email, EmailError
 
 
 @click.command()
@@ -27,7 +27,3 @@ def meow(config_file, debug, smtp_url):
             logging.debug("It is not time to send a reminder yet.")
     except (ConfigurationError, EmailError) as e:
         logging.error(e.message)
-
-
-if __name__ == '__main__':
-    meow()
