@@ -12,16 +12,16 @@ from fatcats.common.send_email import send_email, EmailError
 @click.option('-c', '--config', default='meowstamp.yaml', help='Location of YAML config file.', show_default=True)
 @click.option('-d', '--debug', is_flag=True)
 @click.option('--smtp_url', default='localhost', help='Default SMTP URL.', show_default=True)
-def meow(config_file, debug, smtp_url):
+def meow(config, debug, smtp_url):
     """Sends a reminder if conditions are met."""
     try:
         logging.basicConfig(level=logging.DEBUG if debug else logging.INFO)
-        conf = Configuration().load(config_file)
+        conf = Configuration().load(config)
         now = datetime.datetime.now()
         if now - conf.last_fed > conf.period:
             send_email(conf, smtp_url)
             conf.last_fed = now
-            conf.save(config_file)
+            conf.save(config)
             logging.info("Meowminder sent.")
         else:
             logging.debug("It is not time to send a reminder yet.")

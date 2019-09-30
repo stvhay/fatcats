@@ -1,5 +1,6 @@
 """Module holds configuration object."""
 import attr
+import datetime
 import email.headerregistry
 import yaml
 
@@ -34,6 +35,7 @@ class Configuration(object):
                 data = yaml.safe_load(f)
                 self.last_fed = data['last_fed']
                 self.message = data['message']
+                self.period = datetime.timedelta(hours=data['period'])
                 self.subject = data['subject']
                 self._from_address = data['from']
                 self._to_addresses = data['to']
@@ -58,10 +60,12 @@ class Configuration(object):
         except Exception as e:
             raise ConfigurationError("Error during save.") from e
 
+    @property
     def from_address(self):
         """Convert from address to Address."""
         return self._convert_address(self._from_address)
 
+    @property
     def to_addresses(self):
         """Convert to addresses to an Address generator."""
         return (self._convert_address(addr) for addr in self._to_addresses)
