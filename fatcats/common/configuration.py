@@ -16,7 +16,7 @@ class Configuration(object):
     last_fed = attr.ib(init=False)
     message = attr.ib(init=False)
     subject = attr.ib(init=False)
-    period = attr.ib(init=False)
+    _period = attr.ib(init=False)
     _from_address = attr.ib(init=False)
     _to_addresses = attr.ib(init=False)
 
@@ -35,10 +35,10 @@ class Configuration(object):
                 data = yaml.safe_load(f)
                 self.last_fed = data['last_fed']
                 self.message = data['message']
-                self.period = datetime.timedelta(hours=data['period'])
                 self.subject = data['subject']
                 self._from_address = data['from']
                 self._to_addresses = data['to']
+                self._period = data['period']
                 return self
         except Exception as e:
             raise ConfigurationError("Error during load.") from e
@@ -53,7 +53,8 @@ class Configuration(object):
                         'message': self.message,
                         'subject': self.subject,
                         'from': self._from_address,
-                        'to': self._to_addresses
+                        'to': self._to_addresses,
+                        'period': self._period
                     },
                     f,
                     default_flow_style=False)
@@ -61,11 +62,16 @@ class Configuration(object):
             raise ConfigurationError("Error during save.") from e
 
     @property
+    def period(self):
+        """Get period."""
+        return datetime.timedelta(hours=self._period)
+
+    @property
     def from_address(self):
-        """Convert from address to Address."""
+        """From address."""
         return self._convert_address(self._from_address)
 
     @property
     def to_addresses(self):
-        """Convert to addresses to an Address generator."""
+        """To addresses iterable."""
         return (self._convert_address(addr) for addr in self._to_addresses)
